@@ -6,6 +6,10 @@ Este projeto foi criado por [Netto Cavalcante](mailto:frcnetto@gmail.com) e inic
 
 Para executar o projeto, use:
 
+### `npm install`
+
+Serão instaladas todas as dependências do projeto.
+
 ### `npm start`
 
 O projeto será inicializado em modo de desenvolvimento.<br>
