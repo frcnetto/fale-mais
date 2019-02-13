@@ -1,6 +1,6 @@
 # Fale Mais
 
-Este projeto foi criado por [Netto Cavalcante](mailto:frcnetto@gmail.com) ae inicializado com [Create React App](https://github.com/facebook/create-react-app).
+Este projeto foi criado por [Netto Cavalcante](mailto:frcnetto@gmail.com) e inicializado com [Create React App](https://github.com/facebook/create-react-app).
 
 ## Instruções
 
