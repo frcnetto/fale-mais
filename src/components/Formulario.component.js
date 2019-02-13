@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Form, Col, Row, Button } from "react-bootstrap";
+import { Container, Form, Col, Row, Button, Modal } from "react-bootstrap";
 import { PlanoProvider, TarifaProvider } from '../providers';
 import TarifaController from '../controllers/Tarifa.controller'
 
@@ -14,6 +14,8 @@ class Formulario extends Component {
     this.onChangeOrigem    = this.onChangeOrigem.bind(this);
     this.onChangeEscolhido = this.onChangeEscolhido.bind(this);
     this.calculate         = this.calculate.bind(this);
+    this.handleShow        = this.handleShow.bind(this);
+    this.handleClose       = this.handleClose.bind(this);
     
     this.state             = {
       origens         : [],
@@ -24,7 +26,8 @@ class Formulario extends Component {
       planos          : [],
       planoEscolhido  : "",
       valorComFaleMais: "",
-      valorSemFaleMais: ""
+      valorSemFaleMais: "",
+      showResultado   : false
     };
   }
 
@@ -40,8 +43,30 @@ class Formulario extends Component {
       destinos        : destinos,
       destinoEscolhido: destinos[0],
       planos          : planos,
-      planoEscolhido  : planos[0]
+      planoEscolhido  : planos[0].minutos
     });
+  }
+
+  handleClose = () => {
+    console.log('A')
+    this.setState({ showResultado: false });
+  }
+
+  handleShow = () => {
+    console.log('B')
+    this.setState({ showResultado: true });
+  }
+
+  onChangeTempo = event => {
+    try {
+      let tempo = parseFloat(event.target.value);
+
+      this.setState({ tempo });
+    } 
+    
+    catch (error) {
+      event.target.value = 0;
+    }
   }
 
   onChangeOrigem( event ) {
@@ -72,12 +97,20 @@ class Formulario extends Component {
       valorComFaleMais : resultado.valorComFaleMais,
       valorSemFaleMais : resultado.valorSemFaleMais
     });
+
+    this.handleShow();
     
   }
 
   render() {
     return (
       <Container className="MainContainer">
+        <Row>
+          <Col>
+            <h3>Simulação de Preços dos planos Fale Mais</h3>
+          </Col>
+        </Row>
+        <br/>
         <Form>
           <Form.Row>
             <Form.Group as={Col} controlId="form.ControlOrigem">
@@ -116,7 +149,7 @@ class Formulario extends Component {
                 placeholder="Tempo em minutos..."
                 required={true}
                 value={this.state.tempo}
-                onChange={this.onChangeEscolhido}
+                onChange={this.onChangeTempo}
               />
             </Form.Group>
             <Form.Group as={Col} controlId="form.ControlPlano">
@@ -140,17 +173,31 @@ class Formulario extends Component {
             </Col>
           </Row>
         </Form>
-        <br/>
-        <Row>
-          <Col>
-            <h5>Com Fale Mais</h5>
-            <h6>R$ {this.state.valorComFaleMais}</h6>
-          </Col>
-          <Col>
-            <h5>Sem Fale Mais</h5>
-            <h6>R$ {this.state.valorSemFaleMais}</h6>
-          </Col>
-        </Row>
+        <Modal size="lg"
+               aria-labelledby="contained-modal-title-vcenter"
+               centered 
+               show={this.state.showResultado} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Resultados</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <Col>
+                <h5>Com Fale Mais</h5>
+                <h6>R$ {this.state.valorComFaleMais}</h6>
+              </Col>
+              <Col>
+                <h5>Sem Fale Mais</h5>
+                <h6>R$ {this.state.valorSemFaleMais}</h6>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Fechar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     );
   }
